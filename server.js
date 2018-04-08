@@ -11,12 +11,6 @@ app.get('/', function(req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-const tests = ['test 1', 'test 2', 'test 3'];
-
-app.get('/test', function(req, res) {
-  res.send(tests);
-});
-
 app.get('/hello', function(req, res) {
   res.send('hello');
 });
