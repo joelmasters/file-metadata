@@ -13,9 +13,9 @@ app.get('/', function(req, res) {
 });
 
 app.use('/', function(req, res) {
-  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  const language = req.headers['accept-language'];
-  const os = req.headers['user-agent'];
+  const ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress).split(',')[0];
+  const language = req.headers['accept-language'].split(',')[0];
+  const os = req.headers['user-agent'].split('(')[1].split(')')[0];
 
   var headers = {
     "ip address" : ip,
