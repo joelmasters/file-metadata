@@ -6,5 +6,10 @@
 
 $(function() {
   console.log('hello world :o')
+  
+  $.get('/t', function(info) {
+    $('#info').text(JSON.stringify(info, null, 2));
+    console.log(info);
+  });
 
 })
