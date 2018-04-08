@@ -15,9 +15,20 @@ app.get('/', function(req, res) {
 app.use('/', function(req, res) {
   // remove leading '/' from address
   var input = req.path.slice(1);
+  
+  // remove space decoding in address
   input = replaceAll(input, '%20', ' ');
-  var inputDate = new Date(input);
-  if (inputDate == null) {
+  
+  // check to see if input is unix timestamp
+  if (!isNaN(new Date(input *1000))) {
+    // timestamp is unix
+    var unixTime = (new Date(input *1000)).getTime()/1000;
+  
+  }
+  
+  // create a date object from the input
+  var inputDate = new Date(input *1000);
+  if (isNaN(inputDate.valueOf())) {
     var unixTime = 'null';
     var naturalTime = 'null';
   }
