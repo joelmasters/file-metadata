@@ -8,5 +8,11 @@ $(function() {
   console.log('hello world :o')
   
   $('body').append('Hello');
+  
+  $.get('/test', function(tests) {
+    tests.forEach(function(test) {
+      $('<li></li>').text(test).appendTo('ul#tests');
+    })
+  })
 
 })
