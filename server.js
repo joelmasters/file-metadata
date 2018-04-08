@@ -11,8 +11,8 @@ app.get('/', function(req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-app.get('/hello', function(req, res) {
-  res.send('hello');
+app.get('/', function(req, res) {
+  res.send(req.path);
 });
 
 const listener = app.listen(process.env.PORT, () => {

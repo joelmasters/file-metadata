@@ -7,10 +7,8 @@
 $(function() {
   console.log('hello world :o')
   
-  $('body').append('Hello');
-  
-  $.get('/hello', function(test) {
-    $('<li></li>').text(test).appendTo('ul#tests');
+  $.get('/', function(res) {
+    $(res).appendTo('body');
   })
 
 })
