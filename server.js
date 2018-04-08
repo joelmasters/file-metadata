@@ -19,22 +19,25 @@ app.use('/', function(req, res) {
   // remove space decoding in address
   input = replaceAll(input, '%20', ' ');
   
+  var inputDate;
+  
   // check to see if input is unix timestamp
   if (!isNaN(new Date(input *1000))) {
     // timestamp is unix
-    var unixTime = (new Date(input *1000)).getTime()/1000;
-  
+    // create Date from unix time
+    inputDate = new Date(input*1000);
+  } else {
+    // create Date from other input
+    inputDate = new Date(input); 
   }
   
-  // create a date object from the input
-  var inputDate = new Date(input *1000);
   if (isNaN(inputDate.valueOf())) {
     var unixTime = 'null';
     var naturalTime = 'null';
   }
   else {
     var unixTime = inputDate.getTime()/1000;
-    var naturalTime = getNamedMonth(inputDate.getMonth()) + ' ' + inputDate.getDay() + ', ' + inputDate.getFullYear();
+    var naturalTime = getNamedMonth(inputDate.getMonth()) + ' ' + inputDate.getDate() + ', ' + inputDate.getFullYear();
   }
   var timeOut = { 
     "unix" : unixTime,
