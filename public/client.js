@@ -14,5 +14,9 @@ $(function() {
       $('<li></li>').text(test).appendTo('ul#tests');
     })
   })
+  
+  $.get('/hello', function(test) {
+    $('<li></li>').text(test).appendTo('ul#tests');
+  })
 
 })

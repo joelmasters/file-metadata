@@ -17,6 +17,10 @@ app.get('/test', function(req, res) {
   res.send(tests);
 });
 
+app.get('/hello', function(req, res) {
+  res.send('hello');
+});
+
 const listener = app.listen(process.env.PORT, () => {
    console.log(`Your app is listening on port ${listener.address().port}`)
 });
