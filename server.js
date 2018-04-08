@@ -4,7 +4,6 @@
 var fs = require('fs');
 var express = require('express');
 var app = express();
-var url = require('url');
 
 app.use(express.static('public'));
 
@@ -14,16 +13,16 @@ app.get('/', function(req, res) {
 
 app.use('/', function(req, res) {
   // remove leading '/' from address
-  var input = url.parse(req.path);
-  /*input = input.replace('%', ' ');
+  var input = req.path.slice(1);
+  input = input.replace('%20', ' ');
   var inputDate = new Date(input);
   var unixTime = inputDate.getTime()/1000;
-  var naturalTime = getNamedMonth(inputDate.getMonth()) + ' ' + inputDate.getDay() + ',' + inputDate.getYear();
+  var naturalTime = getNamedMonth(inputDate.getMonth()) + ' ' + inputDate.getDay() + ', ' + inputDate.getFullYear();
   var timeOut = { 
     "unix" : unixTime,
     "natural" : naturalTime
-  }*/
-  res.send(input);
+  };
+  res.send(JSON.stringify(timeOut, null, '\t'));
 });
 
 const listener = app.listen(process.env.PORT, () => {
