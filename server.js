@@ -4,7 +4,6 @@
 var fs = require('fs');
 var express = require('express');
 var app = express();
-var url = require('url');
 
 app.use(express.static('public'));
 
@@ -13,12 +12,24 @@ app.get('/', function(req, res) {
 });
 
 app.use('/', function(req, res) {
-  var input = url.parse(req.path);
-  console.log(input);
-  //input = input.toString().splice(0, 1);
+  // remove leading '/' from address
+  var input = req.path.slice(1);
+  var inputDate = new Date(input);
+  var unixTime = inputDate.getTime()/1000;
+  var naturalTime = inputDate.
+  var timeOut = { 
+    "unix" : unixTime,
+    "natural" : 
+  }
   res.send(input);
 });
 
 const listener = app.listen(process.env.PORT, () => {
    console.log(`Your app is listening on port ${listener.address().port}`)
 });
+  
+function getNamedMonth(monthNum) {
+  const months = [
+      'January', 'February', 'March', 'April',
+    ]
+}
