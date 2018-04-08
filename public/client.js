@@ -7,8 +7,8 @@
 $(function() {
   console.log('hello world :o')
   
-  $.get('/', function(res) {
+  /*$.get('/', function(res) {
     $(res).appendTo('body');
-  })
+  })*/
 
 })
