@@ -6,9 +6,5 @@
 
 $(function() {
   console.log('hello world :o')
-  
-  /*$.get('/', function(res) {
-    $('#date').html(res);
-  })*/
 
 })
