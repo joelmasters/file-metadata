@@ -13,9 +13,17 @@ app.get('/', function(req, res) {
 });
 
 app.use('/', function(req, res) {
-  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  var language = req.headers['accept-language'];
- 
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  const language = req.headers['accept-language'];
+  const os = req.headers['user-agent'];
+
+  var headers = {
+    "ip address" : ip,
+    "language" : language,
+    "operating system" : os,
+  }
+  
+  res.json(headers);
 });
 
 const listener = app.listen(process.env.PORT, () => {
