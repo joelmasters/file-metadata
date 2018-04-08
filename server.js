@@ -4,6 +4,7 @@
 var fs = require('fs');
 var express = require('express');
 var app = express();
+var url = require('url');
 
 app.use(express.static('public'));
 
@@ -13,14 +14,15 @@ app.get('/', function(req, res) {
 
 app.use('/', function(req, res) {
   // remove leading '/' from address
-  var input = req.path.slice(1);
+  var input = url.parse(req.path);
+  /*input = input.replace('%', ' ');
   var inputDate = new Date(input);
   var unixTime = inputDate.getTime()/1000;
-  var naturalTime = inputDate.
+  var naturalTime = getNamedMonth(inputDate.getMonth()) + ' ' + inputDate.getDay() + ',' + inputDate.getYear();
   var timeOut = { 
     "unix" : unixTime,
-    "natural" : 
-  }
+    "natural" : naturalTime
+  }*/
   res.send(input);
 });
 
@@ -30,6 +32,7 @@ const listener = app.listen(process.env.PORT, () => {
   
 function getNamedMonth(monthNum) {
   const months = [
-      'January', 'February', 'March', 'April',
-    ]
+      'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+  return months[monthNum];
 }
