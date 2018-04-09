@@ -1,3 +1,10 @@
+// grab the path information
+// check it for proper formatting
+// if formatted properly, output two hyperlinks:
+//   - the input link
+//   - the shortened link
+// if not formatted properly, output an error
+
 var fs = require('fs');
 var express = require('express');
 var app = express();
@@ -10,17 +17,10 @@ app.get('/', function(req, res) {
 });
 
 app.use('/', function(req, res) {
-  const ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress).split(',')[0];
-  const language = req.headers['accept-language'].split(',')[0];
-  const os = req.headers['user-agent'].split('(')[1].split(')')[0];
-
-  var headers = {
-    "ip address" : ip,
-    "language" : language,
-    "operating system" : os,
-  }
+  // remove the leading '/' from the input
+  const inputURL = req.path.slice(1);
   
-  res.json(headers);
+  
 });
 
 const listener = app.listen(process.env.PORT, () => {
