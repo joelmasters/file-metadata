@@ -26,3 +26,12 @@ app.use('/', function(req, res) {
 const listener = app.listen(process.env.PORT, () => {
    console.log(`Your app is listening on port ${listener.address().port}`)
 });
+
+function checkLink(link) {
+  var splitArrOne = link.split('://');
+  if (splitArrOne[0] != "http" || splitArrOne[0] != "https") {
+    return "error";
+  }
+  var splitArrTwo = splitArrOne[1].split('.');
+  
+}
