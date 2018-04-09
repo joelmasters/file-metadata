@@ -19,6 +19,10 @@ app.get('/', function(req, res) {
 app.use('/', function(req, res) {
   // remove the leading '/' from the input
   const inputURL = req.path.slice(1);
+  if (checkLink(inputURL) == "error")
+  {
+    res.send("error");
+  }
   
   
 });
@@ -33,5 +37,8 @@ function checkLink(link) {
     return "error";
   }
   var splitArrTwo = splitArrOne[1].split('.');
-  
+  if (splitArrTwo.length < 2) {
+    return "error";
+  }
+  return "link";
 }
