@@ -34,10 +34,11 @@ app.use('/', function(req, res) {
   }
   else if (checkLink(inputURL) == "shortened link") {
      // check the db for shortened link and redirect as appropriate
-    var dbResult = checkDB(inputURL, "shortform");
+    var dbResult = "";
+    dbResult = checkDB(inputURL, "shortform");
     console.log(dbResult);
     
-    if (~dbResult.indexOf("(redirect to short)")) {
+    if (dbResult.indexOf("(redirect to short)") != -1) {
       // found shortform link in db  
       var redirectLink = dbResult.split(')')[1];
       // redirect to link found
@@ -86,17 +87,18 @@ function checkDB(link, form) {
   
   mongo.connect(url, function(err, db) {
     if (err) throw err;
-
-    // collection is named 'links'
-    db.links.insert();
   
+    var myDB = db.db('url-shortener');
+    var links = myDB.collection('links');
+    
     // check for longform links
     if (form == "longform") {
       
-      var foundLink = db.links.findOne({ long : link }, { _id: 0, long: 1, short: 1});
+      var foundLink = links.findOne({ long : link }, { _id: 0, long: 1, short: 1});
       
       if (foundLink) {
             // found longform link already in database... return it
+            db.close();
             return JSON.stringify(foundLink);
       }
       
@@ -104,27 +106,28 @@ function checkDB(link, form) {
       var ranShort = getRandomNum();
       
       //var foundShort = db.links.findOne({ short : ranShort });
-      db.links.insert({"long" : link, "short" : ranShort });
+      links.insert({"long" : link, "short" : ranShort });
       
-      foundLink = db.links.findOne({ long : link }, { _id: 0, long: 1, short: 1});
+      foundLink = links.findOne({ long : link }, { _id: 0, long: 1, short: 1});
       
+      db.close();
       return JSON.stringify(foundLink);
 
     }
     else if (form == "shortform") {
       // check for shortform links
       
-      var foundLink = db.links.findOne({ short : link }, { _id: 0, long: 1, short: 1});
+      var foundLink = links.findOne({ short : link }, { _id: 0, long: 1, short: 1});
       
       if (foundLink) {
+         db.close();
          return "(redirect to short)" + foundLink.long; 
       }
       else {
+         db.close();
          return "error"; 
       }
     }
-    
-    db.close();
   
   });
   
