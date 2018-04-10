@@ -43,8 +43,11 @@ app.use('/', function(req, res) {
       var redirectLink = dbResult.split(')')[1];
       // redirect to link found
     }
+    else if (dbResult == "error" ) {
+       res.send("error found error"); 
+    }
     else {
-      res.send("error");  
+      res.send(dbResult);  
     }
     
   }
@@ -86,7 +89,9 @@ function checkLink(link) {
 function checkDB(link, form) {
   
   mongo.connect(url, function(err, db) {
-    if (err) throw err;
+    if (err) {
+       return err; 
+    }
   
     var myDB = db.db('url-shortener');
     var links = myDB.collection('links');
@@ -128,8 +133,14 @@ function checkDB(link, form) {
          return "error"; 
       }
     }
+    else {
+      db.close();
+      return "no form specified";
+    }
   
   });
+  
+  return "nothing";
   
 }
 
