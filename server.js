@@ -30,24 +30,19 @@ app.use('/', function(req, res) {
   // remove the leading '/' from the input
   const inputURL = req.path.slice(1);
   
-  mongo.connect(url, function(err, db) {
-    if (err) throw err;
-
-    // collection is named 'links'
-    //var collection = db.collection('links');
-
-    db.links.insert();
-    db.close();
-  
-  });
-  
-  
-  
-  
   if (checkLink(inputURL) == "error")
   {
     res.send("error");
   }
+  else if (checkLink(inputURL) == "shortened link") {
+     // check the db for shortened link and redirect as appropriate 
+  }
+  else if (checkLink(inputURL) == "link") {
+     // check the db for longform link and display shortened link if available
+     //   - if not available, create a new shortened link
+  }
+  
+  
   
   
   
@@ -61,7 +56,10 @@ const listener = app.listen(process.env.PORT, () => {
 
 // for checking for correct formatting on hyperlink
 function checkLink(link) {
-  if (
+  // check to see if the link is shortened (contains exactly three letters)
+  if (/^[a-z]+$/i.test(link) && link.length == 3) {
+    return "shortened link";
+  }
   var splitArrOne = link.split('://');
   if (splitArrOne[0] != "http" || splitArrOne[0] != "https") {
     return "error";
@@ -71,4 +69,30 @@ function checkLink(link) {
     return "error";
   }
   return "link";
+}
+
+// checks the database for links
+function checkDB(link, form) {
+  
+  mongo.connect(url, function(err, db) {
+    if (err) throw err;
+
+    // collection is named 'links'
+    db.links.insert();
+  
+    if (form == "longform") {
+      // check for longform links
+      db.links.insert({"long" : link, "short" : 
+
+    }
+    else if (form == "shortform") {
+      // check for shortform links
+
+    }
+    
+  
+    db.close();
+  
+  });
+  
 }
