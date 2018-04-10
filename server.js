@@ -14,10 +14,13 @@ var fs = require('fs');
 var express = require('express');
 var app = express();
 var mongo = require('mongodb').MongoClient;
-var url = 'mongodb://username:password@ds01316.mlab.com:1316/food'
+var url = process.env.MONGOLAB_URL;
 
+// set express server
 app.set('json spaces', 2);
 app.use(express.static('public'));
+
+
 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/views/index.html');
@@ -26,10 +29,27 @@ app.get('/', function(req, res) {
 app.use('/', function(req, res) {
   // remove the leading '/' from the input
   const inputURL = req.path.slice(1);
+  
+  mongo.connect(url, function(err, db) {
+    if (err) throw err;
+
+    // collection is named 'links'
+    //var collection = db.collection('links');
+
+    db.links.insert();
+    db.close();
+  
+  });
+  
+  
+  
+  
   if (checkLink(inputURL) == "error")
   {
     res.send("error");
   }
+  
+  
   
   
 });
@@ -38,7 +58,10 @@ const listener = app.listen(process.env.PORT, () => {
    console.log(`Your app is listening on port ${listener.address().port}`)
 });
 
+
+// for checking for correct formatting on hyperlink
 function checkLink(link) {
+  if (
   var splitArrOne = link.split('://');
   if (splitArrOne[0] != "http" || splitArrOne[0] != "https") {
     return "error";
