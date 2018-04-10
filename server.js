@@ -20,8 +20,6 @@ var url = process.env.MONGOLAB_URL;
 app.set('json spaces', 2);
 app.use(express.static('public'));
 
-
-
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
@@ -37,8 +35,9 @@ app.use('/', function(req, res) {
   else if (checkLink(inputURL) == "shortened link") {
      // check the db for shortened link and redirect as appropriate
     var dbResult = checkDB(inputURL, "shortform");
+    console.log(dbResult);
     
-    if (dbResult.includes("(redirect to short)")) {
+    if (~dbResult.indexOf("(redirect to short)")) {
       // found shortform link in db  
       var redirectLink = dbResult.split(')')[1];
       // redirect to link found
@@ -54,14 +53,10 @@ app.use('/', function(req, res) {
     
     var dbResult = checkDB(inputURL, "longform");
     
-    if (dbResult
+    res.send(dbResult);
+    
   }
-  
-  
-  
-  
-  
-  
+    
 });
 
 const listener = app.listen(process.env.PORT, () => {
