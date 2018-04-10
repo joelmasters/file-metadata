@@ -86,12 +86,21 @@ function checkDB(link, form) {
       var foundLink = db.links.findOne({ long : link }, { _id: 0, long: 1, short: 1});
       
       if (foundLink) {
-            // found longform link already in database... return 
+            // found longform link already in database... return it
             return JSON.stringify(foundLink);
       }
       
       // add an entry to the db and create a random number 000-999
-      db.links.insert({"long" : link, "short" : getRandomNum });
+      var ranShort = getRandomNum();
+      
+      //var foundShort = db.links.findOne({ short : ranShort });
+      db.links.insert({"long" : link, "short" : ranShort });
+      
+      var linksObj = {
+                       "lin 
+      }
+      
+      return JSON.stringify
 
     }
     else if (form == "shortform") {
