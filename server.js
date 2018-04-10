@@ -56,8 +56,8 @@ const listener = app.listen(process.env.PORT, () => {
 
 // for checking for correct formatting on hyperlink
 function checkLink(link) {
-  // check to see if the link is shortened (contains exactly three letters)
-  if (/^[a-z]+$/i.test(link) && link.length == 3) {
+  // check to see if the link is shortened (contains exactly three numbers)
+  if (/^\d+$/.test(link) && link.length == 3) {
     return "shortened link";
   }
   var splitArrOne = link.split('://');
@@ -80,9 +80,18 @@ function checkDB(link, form) {
     // collection is named 'links'
     db.links.insert();
   
+    // check for longform links
     if (form == "longform") {
-      // check for longform links
-      db.links.insert({"long" : link, "short" : 
+      
+      var foundLink = db.links.findOne({ long : link }, { _id: 0, long: 1, short: 1});
+      
+      if (foundLink) {
+            // found longform link already in database... return 
+            return JSON.stringify(foundLink);
+      }
+      
+      // add an entry to the db and create a random number 000-999
+      db.links.insert({"long" : link, "short" : getRandomNum });
 
     }
     else if (form == "shortform") {
@@ -95,4 +104,9 @@ function checkDB(link, form) {
   
   });
   
+}
+
+function getRandomNum() {
+  var ranNum = Math.round(Math.random()*999);
+  return ('000' + ranNum).substr(-3); 
 }
