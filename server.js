@@ -35,11 +35,26 @@ app.use('/', function(req, res) {
     res.send("error");
   }
   else if (checkLink(inputURL) == "shortened link") {
-     // check the db for shortened link and redirect as appropriate 
+     // check the db for shortened link and redirect as appropriate
+    var dbResult = checkDB(inputURL, "shortform");
+    
+    if (dbResult.includes("(redirect to short)")) {
+      // found shortform link in db  
+      var redirectLink = dbResult.split(')')[1];
+      // redirect to link found
+    }
+    else {
+      res.send("error");  
+    }
+    
   }
   else if (checkLink(inputURL) == "link") {
      // check the db for longform link and display shortened link if available
      //   - if not available, create a new shortened link
+    
+    var dbResult = checkDB(inputURL, "longform");
+    
+    if (dbResult
   }
   
   
@@ -96,19 +111,24 @@ function checkDB(link, form) {
       //var foundShort = db.links.findOne({ short : ranShort });
       db.links.insert({"long" : link, "short" : ranShort });
       
-      var linksObj = {
-                       "lin 
-      }
+      foundLink = db.links.findOne({ long : link }, { _id: 0, long: 1, short: 1});
       
-      return JSON.stringify
+      return JSON.stringify(foundLink);
 
     }
     else if (form == "shortform") {
       // check for shortform links
-
+      
+      var foundLink = db.links.findOne({ short : link }, { _id: 0, long: 1, short: 1});
+      
+      if (foundLink) {
+         return "(redirect to short)" + foundLink.long; 
+      }
+      else {
+         return "error"; 
+      }
     }
     
-  
     db.close();
   
   });
