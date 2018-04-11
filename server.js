@@ -28,11 +28,7 @@ app.use('/', function(req, res) {
   // remove the leading '/' from the input
   const inputURL = req.path.slice(1);
   
-  if (checkLink(inputURL) == "error")
-  {
-    res.send(checkLink(inputURL));
-  }
-  else if (checkLink(inputURL) == "shortened link") {
+  if (checkLink(inputURL) == "shortened link") {
     // check the db for shortened link and redirect as appropriate 
     checkDB(inputURL, "shortform").then(function (dbResult) {
       console.log(dbResult);
@@ -41,7 +37,7 @@ app.use('/', function(req, res) {
         // found shortform link in db  
         var redirectLink = dbResult.split(')')[1];
         // redirect to link found
-        res.send("found shortened link");
+        res.send("found shortened link: " + redirectLink);
       }
       else if (dbResult == "error" ) {
          res.send("error found error"); 
@@ -55,9 +51,16 @@ app.use('/', function(req, res) {
      // check the db for longform link and display shortened link if available
      //   - if not available, create a new shortened link
     
-    checkDB(inputURL, "longform").then(function (dbResult) {
+    res.send("valid link");
+    
+    /*checkDB(inputURL, "longform")
+      .then(function (dbResult) {
         res.send(dbResult);
-    }); 
+      }); */
+  }
+  if (checkLink(inputURL) == "error at https" || ")
+  {
+    res.send(checkLink(inputURL));
   }
     
 });
@@ -109,10 +112,10 @@ function checkDB(link, form) {
             }
 
             // add an entry to the db and create a random number 000-999
-            var ranShort = getRandomNum();
+            var ranShort = getRandomNum().toString();
 
             // insert new link
-            links.insert({"long" : link, "short" : ranShort })
+            links.insert({ long : link, short : ranShort })
               .then(() => {
                 // find the new inserted link
                 links.findOne({ long : link }, { _id: 0, long: 1, short: 1})
