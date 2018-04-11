@@ -33,23 +33,23 @@ app.use('/', function(req, res) {
     res.send("error");
   }
   else if (checkLink(inputURL) == "shortened link") {
-     // check the db for shortened link and redirect as appropriate
-    var dbResult = "";
-    dbResult = checkDB(inputURL, "shortform");
-    console.log(dbResult);
+    // check the db for shortened link and redirect as appropriate
+    // need to set up promise chain  
+    checkDB(inputURL, "shortform").then(function (dbResult) {
+      console.log(dbResult);
     
-    if (dbResult.indexOf("(redirect to short)") != -1) {
-      // found shortform link in db  
-      var redirectLink = dbResult.split(')')[1];
-      // redirect to link found
-    }
-    else if (dbResult == "error" ) {
-       res.send("error found error"); 
-    }
-    else {
-      res.send(dbResult);  
-    }
-    
+      if (dbResult.indexOf("(redirect to short)") != -1) {
+        // found shortform link in db  
+        var redirectLink = dbResult.split(')')[1];
+        // redirect to link found
+      }
+      else if (dbResult == "error" ) {
+         res.send("error found error"); 
+      }
+      else {
+        res.send(dbResult);  
+      }
+    });
   }
   else if (checkLink(inputURL) == "link") {
      // check the db for longform link and display shortened link if available
@@ -88,60 +88,62 @@ function checkLink(link) {
 // checks the database for links
 function checkDB(link, form) {
   
-  mongo.connect(url, function(err, db) {
-    if (err) {
-       return err; 
-    }
+  return new Promise((resolve, reject) => {
   
-    var myDB = db.db('url-shortener');
-    var links = myDB.collection('links');
-    
-    // check for longform links
-    if (form == "longform") {
-      
-      var foundLink = links.findOne({ long : link }, { _id: 0, long: 1, short: 1});
-      
-      if (foundLink) {
-            // found longform link already in database... return it
-            db.close();
-            return JSON.stringify(foundLink);
+    mongo.connect(url, function(err, db) {
+      if (err) {
+         return err; 
       }
-      
-      // add an entry to the db and create a random number 000-999
-      var ranShort = getRandomNum();
-      
-      //var foundShort = db.links.findOne({ short : ranShort });
-      links.insert({"long" : link, "short" : ranShort });
-      
-      foundLink = links.findOne({ long : link }, { _id: 0, long: 1, short: 1});
-      
-      db.close();
-      return JSON.stringify(foundLink);
 
-    }
-    else if (form == "shortform") {
-      // check for shortform links
-      
-      var foundLink = links.findOne({ short : link }, { _id: 0, long: 1, short: 1});
-      
-      if (foundLink) {
-         db.close();
-         return "(redirect to short)" + foundLink.long; 
+      var myDB = db.db('url-shortener');
+      var links = myDB.collection('links');
+
+      // check for longform links
+      if (form == "longform") {
+
+        var foundLink = links.findOne({ long : link }, { _id: 0, long: 1, short: 1});
+
+        if (foundLink) {
+              // found longform link already in database... return it
+              db.close();
+              return JSON.stringify(foundLink);
+        }
+
+        // add an entry to the db and create a random number 000-999
+        var ranShort = getRandomNum();
+
+        //var foundShort = db.links.findOne({ short : ranShort });
+        links.insert({"long" : link, "short" : ranShort });
+
+        foundLink = links.findOne({ long : link }, { _id: 0, long: 1, short: 1});
+
+        db.close();
+        return JSON.stringify(foundLink);
+
+      }
+      else if (form == "shortform") {
+        // check for shortform links
+
+        links.findOne({ short : link }, { _id: 0, long: 1, short: 1}).then(function (foundLink) {
+          if (foundLink) {
+             db.close();
+             return "(redirect to short)" + foundLink.long; 
+          }
+          else {
+             db.close();
+             return "error"; 
+          }
+        });
       }
       else {
-         db.close();
-         return "error"; 
+        db.close();
+        return "no form specified";
       }
-    }
-    else {
-      db.close();
-      return "no form specified";
-    }
-  
+
+    });
+
+    return "nothing";
   });
-  
-  return "nothing";
-  
 }
 
 function getRandomNum() {
