@@ -33,8 +33,7 @@ app.use('/', function(req, res) {
     res.send("error");
   }
   else if (checkLink(inputURL) == "shortened link") {
-    // check the db for shortened link and redirect as appropriate
-    // need to set up promise chain  
+    // check the db for shortened link and redirect as appropriate 
     checkDB(inputURL, "shortform").then(function (dbResult) {
       console.log(dbResult);
     
@@ -55,10 +54,9 @@ app.use('/', function(req, res) {
      // check the db for longform link and display shortened link if available
      //   - if not available, create a new shortened link
     
-    var dbResult = checkDB(inputURL, "longform");
-    
-    res.send(dbResult);
-    
+    checkDB(inputURL, "longform").then(function (dbResult) {
+        res.send(dbResult);
+    }); 
   }
     
 });
@@ -101,24 +99,27 @@ function checkDB(link, form) {
       // check for longform links
       if (form == "longform") {
 
-        var foundLink = links.findOne({ long : link }, { _id: 0, long: 1, short: 1});
+        links.findOne({ long : link }, { _id: 0, long: 1, short: 1})
+          .then(function (foundLink) {
+            if (foundLink) {
+                  // found longform link already in database... return it
+                  db.close();
+                  resolve(JSON.stringify(foundLink));
+            }
 
-        if (foundLink) {
-              // found longform link already in database... return it
-              db.close();
-              return JSON.stringify(foundLink);
-        }
+            // add an entry to the db and create a random number 000-999
+            var ranShort = getRandomNum();
 
-        // add an entry to the db and create a random number 000-999
-        var ranShort = getRandomNum();
+            //var foundShort = db.links.findOne({ short : ranShort });
+            links.insert({"long" : link, "short" : ranShort }).then(() => {
+                links.findOne({ long : link }, { _id: 0, long: 1, short: 1}).then(function ;
+            });
 
-        //var foundShort = db.links.findOne({ short : ranShort });
-        links.insert({"long" : link, "short" : ranShort });
+            
 
-        foundLink = links.findOne({ long : link }, { _id: 0, long: 1, short: 1});
-
-        db.close();
-        return JSON.stringify(foundLink);
+            db.close();
+            resolve(JSON.stringify(foundLink));
+        });
 
       }
       else if (form == "shortform") {
@@ -128,17 +129,17 @@ function checkDB(link, form) {
           .then(function (foundLink) {
             if (foundLink) {
                db.close();
-               return "(redirect to short)" + foundLink.long; 
+               resolve("(redirect to short)" + foundLink.long); 
             }
             else {
                db.close();
-               return "error"; 
+               resolve("error"); 
             }
           });
       }
       else {
         db.close();
-        return "no form specified";
+        resolve("no form specified");
       }
 
     });
