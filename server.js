@@ -124,16 +124,17 @@ function checkDB(link, form) {
       else if (form == "shortform") {
         // check for shortform links
 
-        links.findOne({ short : link }, { _id: 0, long: 1, short: 1}).then(function (foundLink) {
-          if (foundLink) {
-             db.close();
-             return "(redirect to short)" + foundLink.long; 
-          }
-          else {
-             db.close();
-             return "error"; 
-          }
-        });
+        links.findOne({ short : link }, { _id: 0, long: 1, short: 1})
+          .then(function (foundLink) {
+            if (foundLink) {
+               db.close();
+               return "(redirect to short)" + foundLink.long; 
+            }
+            else {
+               db.close();
+               return "error"; 
+            }
+          });
       }
       else {
         db.close();
