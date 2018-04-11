@@ -30,7 +30,7 @@ app.use('/', function(req, res) {
   
   if (checkLink(inputURL) == "error")
   {
-    res.send("error");
+    res.send(checkLink(inputURL));
   }
   else if (checkLink(inputURL) == "shortened link") {
     // check the db for shortened link and redirect as appropriate 
@@ -41,6 +41,7 @@ app.use('/', function(req, res) {
         // found shortform link in db  
         var redirectLink = dbResult.split(')')[1];
         // redirect to link found
+        res.send("found shortened link");
       }
       else if (dbResult == "error" ) {
          res.send("error found error"); 
@@ -74,11 +75,11 @@ function checkLink(link) {
   }
   var splitArrOne = link.split('://');
   if (splitArrOne[0] != "http" || splitArrOne[0] != "https") {
-    return "error";
+    return "error at https";
   }
   var splitArrTwo = splitArrOne[1].split('.');
   if (splitArrTwo.length < 2) {
-    return "error";
+    return "error at . length";
   }
   return "link";
 }
@@ -90,7 +91,7 @@ function checkDB(link, form) {
   
     mongo.connect(url, function(err, db) {
       if (err) {
-         return err; 
+         return (err); 
       }
 
       var myDB = db.db('url-shortener');
@@ -110,15 +111,16 @@ function checkDB(link, form) {
             // add an entry to the db and create a random number 000-999
             var ranShort = getRandomNum();
 
-            //var foundShort = db.links.findOne({ short : ranShort });
-            links.insert({"long" : link, "short" : ranShort }).then(() => {
-                links.findOne({ long : link }, { _id: 0, long: 1, short: 1}).then(function ;
-            });
-
-            
-
-            db.close();
-            resolve(JSON.stringify(foundLink));
+            // insert new link
+            links.insert({"long" : link, "short" : ranShort })
+              .then(() => {
+                // find the new inserted link
+                links.findOne({ long : link }, { _id: 0, long: 1, short: 1})
+                  .then(function (foundInsertedLink) {
+                    db.close();
+                    resolve(JSON.stringify(foundInsertedLink));
+                });
+            });   
         });
 
       }
@@ -144,7 +146,6 @@ function checkDB(link, form) {
 
     });
 
-    return "nothing";
   });
 }
 
