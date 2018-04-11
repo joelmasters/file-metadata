@@ -51,15 +51,14 @@ app.use('/', function(req, res) {
      // check the db for longform link and display shortened link if available
      //   - if not available, create a new shortened link
     
-    res.send("valid link");
+    //res.send("valid link");
     
-    /*checkDB(inputURL, "longform")
+    checkDB(inputURL, "longform")
       .then(function (dbResult) {
         res.send(dbResult);
-      }); */
+      }); 
   }
-  if (checkLink(inputURL) == "error at https" || ")
-  {
+  else {
     res.send(checkLink(inputURL));
   }
     
@@ -77,8 +76,8 @@ function checkLink(link) {
     return "shortened link";
   }
   var splitArrOne = link.split('://');
-  if (splitArrOne[0] != "http" || splitArrOne[0] != "https") {
-    return "error at https";
+  if (splitArrOne[0] !== "http" && splitArrOne[0] !== "https") {
+    return ("error at https: " + splitArrOne[0]);
   }
   var splitArrTwo = splitArrOne[1].split('.');
   if (splitArrTwo.length < 2) {
@@ -103,12 +102,12 @@ function checkDB(link, form) {
       // check for longform links
       if (form == "longform") {
 
-        links.findOne({ long : link }, { _id: 0, long: 1, short: 1})
+        links.findOne({ long : link })
           .then(function (foundLink) {
             if (foundLink) {
                   // found longform link already in database... return it
                   db.close();
-                  resolve(JSON.stringify(foundLink));
+                  resolve(JSON.stringify(foundLink, null, 2));
             }
 
             // add an entry to the db and create a random number 000-999
