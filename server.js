@@ -37,9 +37,9 @@ app.use('/list', function(req, res) {
       var myDB = db.db('url-shortener');
       var links = myDB.collection('links');
      
-      links.find().toArray(function(data) {
-        
+      links.find({ long:  { $exists: true }}).toArray(function(data) {
         db.close();
+        console.log(data);
         res.send(data);
       });
    });
