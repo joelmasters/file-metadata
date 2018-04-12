@@ -6,9 +6,9 @@ $(function() {
   $('#show-list').on('click', function() {
     $.get('/list', function(list) {
       console.log(list);
-      /*list.forEach(function(item) {
+      list.forEach(function(item) {
          $('#info').append('<li>' + item.long + ': ' + item.short + '</li>'); 
-      });*/
+      });
     });
   });
 

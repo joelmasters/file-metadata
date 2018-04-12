@@ -37,9 +37,9 @@ app.use('/list', function(req, res) {
       var myDB = db.db('url-shortener');
       var links = myDB.collection('links');
      
-      links.find({ long:  { $exists: true }}).toArray(function(data) {
+      links.find({ long:  { $exists: true }}).toArray(function(err, data) {
+        if (err) throw err;
         db.close();
-        console.log(data);
         res.send(data);
       });
    });
@@ -72,8 +72,6 @@ app.use('/', function(req, res) {
   else if (checkLink(inputURL) == "link") {
      // check the db for longform link and display shortened link if available
      //   - if not available, create a new shortened link
-    
-    //res.send("valid link");
     
     checkDB(inputURL, "longform")
       .then(function (dbResult) {
@@ -173,6 +171,7 @@ function checkDB(link, form) {
   });
 }
 
+// gets a random number from 000-999
 function getRandomNum() {
   var ranNum = Math.round(Math.random()*999);
   return ('000' + ranNum).substr(-3); 
