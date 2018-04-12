@@ -25,7 +25,10 @@ app.get('/', function(req, res) {
   //res.send("Hello");
 });
 
-app.get('/list', function(req, res) {
+app.use('/list', function(req, res) {
+  
+  //res.send("got here");
+  
    mongo.connect(url, function(err, db) {
      if (err) {
          return (err); 
@@ -34,12 +37,12 @@ app.get('/list', function(req, res) {
       var myDB = db.db('url-shortener');
       var links = myDB.collection('links');
      
-      links.find().then(function(data) {
+      links.find().toArray(function(data) {
         
         db.close();
-        res.send("made it through here");
-      })
-   })
+        res.send(data);
+      });
+   });
 });
 
 app.use('/', function(req, res) {
