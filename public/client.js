@@ -12,6 +12,12 @@ $(function() {
     });
   });
   
+  $('#add-button').on('click', function() {
+    $.get($('#input').val(), function(data, status){
+        alert("Data: " + data + "\nStatus: " + status);
+    });
+  });
+  
   $.get('/', function(res) {
     console.log(res);
   });
