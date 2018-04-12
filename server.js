@@ -22,6 +22,7 @@ app.use(express.static('public'));
 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/views/index.html');
+  //res.send("Hello");
 });
 
 app.use('/', function(req, res) {
@@ -102,7 +103,7 @@ function checkDB(link, form) {
       // check for longform links
       if (form == "longform") {
 
-        links.findOne({ long : link }).project({ _id: 0, long: 1, short: 1})
+        links.findOne({ long : link }, { _id: 0 })
         .then(function (foundLink) {
             if (foundLink) {
                   // found longform link already in database... return it
