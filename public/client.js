@@ -19,7 +19,7 @@ $(function() {
       console.log(data);
       data = JSON.parse(data);
       console.log(typeof data);
-      var code = 'long: <a href="' + data.long + '" target="_blank"><br>short: ' + data.short;
+      var code = 'long: <a href="' + data.long + '" target="_blank">' + data.long + '</a><br>short: ' + homeLink + data.short;
         $('#info').html(code);
     });
   });
