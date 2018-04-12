@@ -25,6 +25,23 @@ app.get('/', function(req, res) {
   //res.send("Hello");
 });
 
+app.get('/list', function(req, res) {
+   mongo.connect(url, function(err, db) {
+     if (err) {
+         return (err); 
+      }
+
+      var myDB = db.db('url-shortener');
+      var links = myDB.collection('links');
+     
+      links.find().then(function(data) {
+        
+        db.close();
+        res.send("made it through here");
+      })
+   })
+});
+
 app.use('/', function(req, res) {
   // remove the leading '/' from the input
   const inputURL = req.path.slice(1);
