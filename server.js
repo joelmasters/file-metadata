@@ -38,13 +38,14 @@ app.use('/', function(req, res) {
         // found shortform link in db  
         var redirectLink = dbResult.split(')')[1];
         // redirect to link found
-        res.send("found shortened link: " + redirectLink);
+        //res.send("found shortened link: " + redirectLink);
+        res.redirect(redirectLink);
       }
       else if (dbResult == "error" ) {
          res.send("error found error"); 
       }
       else {
-        res.send(dbResult);  
+        res.json(dbResult);  
       }
     });
   }
@@ -56,7 +57,7 @@ app.use('/', function(req, res) {
     
     checkDB(inputURL, "longform")
       .then(function (dbResult) {
-        res.send(dbResult);
+        res.json(dbResult);
       }); 
   }
   else {
@@ -108,7 +109,7 @@ function checkDB(link, form) {
             if (foundLink) {
                   // found longform link already in database... return it
                   db.close();
-                  resolve(JSON.stringify(foundLink, null, 2));
+                  resolve(foundLink);
             }
 
             // add an entry to the db and create a random number 000-999
@@ -121,7 +122,7 @@ function checkDB(link, form) {
                 links.findOne({ long : link }, { _id: 0, long: 1, short: 1})
                   .then(function (foundInsertedLink) {
                     db.close();
-                    resolve(JSON.stringify(foundInsertedLink));
+                    resolve(foundInsertedLink);
                 });
             });   
         });
