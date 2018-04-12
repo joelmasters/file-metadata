@@ -11,5 +11,9 @@ $(function() {
       });
     });
   });
+  
+  $.get('/', function(res) {
+    console.log(res);
+  });
 
 })
