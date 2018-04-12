@@ -3,6 +3,8 @@
 $(function() {
   console.log('hello world :o')
   
+  var homeLink = "https://wise-wrench.glitch.me/";
+  
   $('#show-list').on('click', function() {
     $.get('/list', function(list) {
       console.log(list);
@@ -13,8 +15,12 @@ $(function() {
   });
   
   $('#add-button').on('click', function() {
-    $.get($('#input').val(), function(data, status){
-        alert("Data: " + data + "\nStatus: " + status);
+    $.get('/' + $('#input').val(), function(data) {
+      console.log(data);
+      data = JSON.parse(data);
+      console.log(typeof data);
+      var code = 'long: <a href="' + data.long + '" target="_blank"><br>short: ' + data.short;
+        $('#info').html(code);
     });
   });
   

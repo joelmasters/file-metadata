@@ -65,7 +65,7 @@ app.use('/', function(req, res) {
          res.send("error found error"); 
       }
       else {
-        res.json(dbResult);  
+        res.send(dbResult);  
       }
     });
   }
@@ -75,7 +75,7 @@ app.use('/', function(req, res) {
     
     checkDB(inputURL, "longform")
       .then(function (dbResult) {
-        res.json(dbResult);
+        res.send(dbResult);
       }); 
   }
   else {
