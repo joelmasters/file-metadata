@@ -23,9 +23,5 @@ $(function() {
         $('#info').html(code);
     });
   });
-  
-  $.get('/', function(res) {
-    console.log(res);
-  });
 
 })

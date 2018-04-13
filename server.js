@@ -119,8 +119,8 @@ function checkDB(link, form) {
       // check for longform links
       if (form == "longform") {
 
-        links.findOne({ long : link }, { _id: 0 })
-        .then(function (foundLink) {
+        links.findOne({ long : link }, { _id: 0})
+        .then(function(foundLink
             if (foundLink) {
                   // found longform link already in database... return it
                   db.close();
@@ -139,8 +139,7 @@ function checkDB(link, form) {
                     db.close();
                     resolve(foundInsertedLink);
                 });
-            });   
-        });
+          });   
 
       }
       else if (form == "shortform") {
