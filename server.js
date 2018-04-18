@@ -39,7 +39,9 @@ app.use('/', function(req, res) {
       data += chunk;
     });
     
-    response.end(
+    response.on('end', function(err) {
+      if (err) throw err;
+    });
     
   });
   
