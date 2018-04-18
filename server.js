@@ -33,7 +33,7 @@ app.use('/', function(req, res) {
     hostname: 'api.imgur.com',
     path: '/3/gallery/search/?q=' + searchTerm,
     headers: {
-        'Authorization': 'Client-ID {{clientId}}'
+        'Authorization': 'Client-ID 2617d18ea554f54'
       }
   };
   
