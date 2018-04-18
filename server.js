@@ -1,14 +1,11 @@
-// grab the path information
-// check it for proper formatting
-// check the database for shortform link
-//   - if it exists, re-route to new link
-// check database for longform link
-//   - if the link doesn't exist, create a new one
-//   - if it does exist, output the two hyperlinks
-// if formatted properly, output two hyperlinks:
-//   - the input link
-//   - the shortened link
-// if not formatted properly, output an error
+// Image search abstraction layer
+// Requests in the form of /<search term>?offset=<page offset>
+// Return:
+// {
+//   image url:
+//   alt text: 
+//   page url:
+// }
 
 var fs = require('fs');
 var express = require('express');
@@ -24,11 +21,11 @@ app.get('/', function(req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-app.use('/list', function(req, res) {
-
-});
-
 app.use('/', function(req, res) {
+  var inputURL = req.path.slice(1);
+  var searchTerm = inputURL.split('?')[0];
+  var offset = inputURL.split('?offset=')[1];
+  
     
 });
 
