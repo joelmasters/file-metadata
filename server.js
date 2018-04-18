@@ -10,6 +10,7 @@
 var fs = require('fs');
 var express = require('express');
 var app = express();
+var http = require('http');
 var mongo = require('mongodb').MongoClient;
 var url = process.env.MONGOLAB_URL;
 
@@ -24,7 +25,23 @@ app.get('/', function(req, res) {
 app.use('/', function(req, res) {
   var inputURL = req.path.slice(1);
   var searchTerm = inputURL.split('?')[0];
+  searchTerm = searchTerm.replace('%20', ' ');
   var offset = inputURL.split('?offset=')[1];
+  
+  var searchURL = 'https://api.imgur.com/3/gallery/search/?q=' + searchTerm;
+  
+  http.get(searchURL, function(response) {
+    var buffer = "";
+    var data = "";
+    var route = "";
+    
+    response.on('data', function(chunk) {
+      data += chunk;
+    });
+    
+    response.end(
+    
+  });
   
     
 });
