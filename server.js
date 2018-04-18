@@ -10,7 +10,7 @@
 var fs = require('fs');
 var express = require('express');
 var app = express();
-var http = require('http');
+var https = require('https');
 var mongo = require('mongodb').MongoClient;
 var url = process.env.MONGOLAB_URL;
 
@@ -29,14 +29,15 @@ app.use('/', function(req, res) {
   var offset = inputURL.split('?offset=')[1];
   
   const options = {
+    protocol: 'https:',
     hostname: 'api.imgur.com',
     path: '/3/gallery/search/?q=' + searchTerm,
     headers: {
-      Authorization: Client-ID {{client
+        'Authorization': 'Client-ID {{clientId}}'
       }
   };
   
-  http.get(searchURL, function(response) {
+  https.get(options, function(response) {
     var buffer = "";
     var data = "";
     var route = "";
@@ -49,6 +50,8 @@ app.use('/', function(req, res) {
       if (err) throw err;
       
       data = JSON.parse(buffer);
+      console.log(data);
+      res.send(data);
       
     });
     
