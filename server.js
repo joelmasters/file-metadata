@@ -28,7 +28,13 @@ app.use('/', function(req, res) {
   searchTerm = searchTerm.replace('%20', ' ');
   var offset = inputURL.split('?offset=')[1];
   
-  var searchURL = 'https://api.imgur.com/3/gallery/search/?q=' + searchTerm;
+  const options = {
+    hostname: 'api.imgur.com',
+    path: '/3/gallery/search/?q=' + searchTerm,
+    headers: {
+      Authorization: Client-ID {{client
+      }
+  };
   
   http.get(searchURL, function(response) {
     var buffer = "";
@@ -36,11 +42,14 @@ app.use('/', function(req, res) {
     var route = "";
     
     response.on('data', function(chunk) {
-      data += chunk;
+      buffer += chunk;
     });
     
     response.on('end', function(err) {
       if (err) throw err;
+      
+      data = JSON.parse(buffer);
+      
     });
     
   });
