@@ -1,4 +1,4 @@
-URL Shortener Service
+Image Search Abstraction Layer
 ======================
 
 FreeCodeCamp.org Back-end API Project
