@@ -22,6 +22,20 @@ app.get('/', function(req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
+app.use('/list', function(req, res) {
+  mongo.connect(url, function(err, db) {
+    if (err) throw err;
+    var myDB = db.db(url);
+    var collection = myDB.collection('images');
+    
+    collection.find().toArray(function(err, docs) {
+      db.close();
+      req.send(docs);  
+    });
+    
+  });
+});
+
 app.use('/', function(req, res) {
   var inputURL = req.path.slice(1);
   var searchTerm = inputURL.split('?')[0];
@@ -64,6 +78,9 @@ app.use('/', function(req, res) {
           break;
         }
       }
+      
+      mongo.connect(url, f
+      
       res.send(dataTitles);
       
     });
