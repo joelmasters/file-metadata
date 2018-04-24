@@ -57,11 +57,12 @@ app.use('/', function(req, res) {
         dataTitles.push({
           "title" : data["data"][obj]["title"],
           "link" : data["data"][obj]["link"],
-          "views" : data["
+          "views" : data["data"][obj]["views"],
+          "id" : data["data"][obj]["id"]
         
         });    
       }
-      res.send(data);
+      res.send(dataTitles);
       
     });
     
