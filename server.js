@@ -29,6 +29,7 @@ app.use('/list', function(req, res) {
     var collection = myDB.collection('images');
     
     collection.find().toArray(function(err, docs) {
+      if (err) throw err;
       db.close();
       res.send(docs); 
     });
@@ -39,6 +40,7 @@ app.use('/list', function(req, res) {
 app.use('/', function(req, res) {
   var inputURL = req.path.slice(1);
   var searchTerm = inputURL.split('?')[0];
+  if (searchTerm == 'favico
   searchTerm = searchTerm.replace('%20', ' ');
   var offset = inputURL.split('?offset=')[1];
   
@@ -64,7 +66,6 @@ app.use('/', function(req, res) {
       if (err) throw err;
       
       data = JSON.parse(buffer);
-      console.log(data);
       var dataTitles = [];
       
       for (var obj in data["data"]) {
@@ -81,15 +82,15 @@ app.use('/', function(req, res) {
       
       // connect to the external database
       mongo.connect(url, function(err, db) {
+        if (err) throw err;
+        
         var myDB = db.db('url-shortener');
         
         // store docs in images collection
         var collection = myDB.collection('images');
         
         // add the search term to the database in images collection
-        collection.insertOne({search: searchTerm}).then(function(err, data) {
-          // if error occurs, report error
-          if (err) throw err;
+        collection.insertOne({search: searchTerm}).then(function(data) {
           db.close();
           // send the reponse back to the page
           res.send(dataTitles);
