@@ -31,7 +31,7 @@ app.use('/', function(req, res) {
   const options = {
     protocol: 'https:',
     hostname: 'api.imgur.com',
-    path: '/3/gallery/search/?q=' + searchTerm,
+    path: '/3/gallery/search/time/all/' + offset + '?q=' + searchTerm,
     headers: {
         'Authorization': 'Client-ID 2617d18ea554f54'
       }
@@ -59,8 +59,10 @@ app.use('/', function(req, res) {
           "link" : data["data"][obj]["link"],
           "views" : data["data"][obj]["views"],
           "id" : data["data"][obj]["id"]
-        
-        });    
+        });
+        if (dataTitles.length == 10) {
+          break;
+        }
       }
       res.send(dataTitles);
       
