@@ -51,6 +51,16 @@ app.use('/', function(req, res) {
       
       data = JSON.parse(buffer);
       console.log(data);
+      var dataTitles = [];
+      
+      for (var obj in data["data"]) {
+        dataTitles.push({
+          "title" : data["data"][obj]["title"],
+          "link" : data["data"][obj]["link"],
+          "views" : data["
+        
+        });    
+      }
       res.send(data);
       
     });
