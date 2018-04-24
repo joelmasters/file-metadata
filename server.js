@@ -25,12 +25,12 @@ app.get('/', function(req, res) {
 app.use('/list', function(req, res) {
   mongo.connect(url, function(err, db) {
     if (err) throw err;
-    var myDB = db.db(url);
+    var myDB = db.db('url-shortener');
     var collection = myDB.collection('images');
     
     collection.find().toArray(function(err, docs) {
       db.close();
-      req.send(docs);  
+      res.send(docs); 
     });
     
   });
@@ -79,9 +79,25 @@ app.use('/', function(req, res) {
         }
       }
       
-      mongo.connect(url, f
-      
-      res.send(dataTitles);
+      // connect to the external database
+      mongo.connect(url, function(err, db) {
+        var myDB = db.db('url-shortener');
+        
+        // store docs in images collection
+        var collection = myDB.collection('images');
+        
+        // add the search term to the database in images collection
+        collection.insertOne({search: searchTerm}).then(function(err, data) {
+          // if error occurs, report error
+          if (err) throw err;
+          db.close();
+          // send the reponse back to the page
+          res.send(dataTitles);
+          // close and disconnect from the database
+          
+        });
+        
+      });
       
     });
     
