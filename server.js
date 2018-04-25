@@ -37,10 +37,17 @@ app.use('/list', function(req, res) {
   });
 });
 
+// this prevents favicon.ico request from populating in database
+app.use('/favicon.ico', function(req, res) {
+  // do nothing but log that favicon was sent
+  console.log('favicon sent');
+  res.end();
+});
+
 app.use('/', function(req, res) {
   var inputURL = req.path.slice(1);
   var searchTerm = inputURL.split('?')[0];
-  if (searchTerm == 'favico
+
   searchTerm = searchTerm.replace('%20', ' ');
   var offset = inputURL.split('?offset=')[1];
   
@@ -103,8 +110,7 @@ app.use('/', function(req, res) {
     });
     
   });
-  
-    
+
 });
 
 const listener = app.listen(process.env.PORT, () => {
