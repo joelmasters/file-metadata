@@ -6,7 +6,8 @@ var fs = require('fs');
 var express = require('express');
 var multer = require('multer');
 
-var upload = multer({ dest: 'uploads/' });
+var storage = multer.memoryStorage()
+var upload = multer({ storage: storage })
 
 var app = express();
 
