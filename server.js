@@ -18,8 +18,8 @@ app.get('/', function(req, res) {
 });
 
 app.post('/upload/image', upload.single('input'), function(req, res, next) {
-  console.log(req.file);
-  res.json({succes: true});
+  console.log(req.file.size);
+  res.send(req.file.size);
   
 });
 
