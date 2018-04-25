@@ -3,10 +3,10 @@
 $(function() {
   console.log('hello world :o')
   
- $('form').on('submit', function() {
-   console.log('image file: ' + $('#image-file').file);
+ $('#submit-button').on('click', function() {
+   console.log('image file: ' + $('input').files);
    
-   $.post('upload/image', $('#image-file').file, function(data, status){
+   $.post('upload/image', $('#image-file').files, function(data, status){
           
           alert("Data: " + data + "\nStatus: " + status);
       });

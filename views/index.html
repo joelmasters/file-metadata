@@ -27,10 +27,11 @@
       Upload a file and see the size
     </h5>
     
-    <form enctype="multipart/form-data" action="/upload/image" method="post">
+    <form enctype="multipart/form-data">
       <input id="image-file" type="file" name="image"/>
-      <input type="submit" value="Submit">
     </form>
+    
+    <button id="submit-button">Submit</button>
     
     <!-- Your web-app is https, so your scripts need to be too -->
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"
