@@ -1,4 +1,4 @@
-Image Search Abstraction Layer
+File Metadata Microservice
 ======================
 
 FreeCodeCamp.org Back-end API Project
