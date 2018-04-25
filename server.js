@@ -6,16 +6,7 @@ var fs = require('fs');
 var express = require('express');
 var multer = require('multer');
 
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null)
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now())
-  }
-})
- 
-var upload = multer({ storage: storage })
+var upload = multer({ dest: 'uploads/' });
 
 var app = express();
 
@@ -27,7 +18,7 @@ app.get('/', function(req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-app.post('/upload/image', upload.single('input'), function(req, res, next) {
+app.post('/upload/image', upload.single('image'), function(req, res, next) {
   console.log(req.file);
   res.send("hello");
   
