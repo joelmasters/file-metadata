@@ -4,17 +4,22 @@
 
 var fs = require('fs');
 var express = require('express');
+var multer = require('multer');
+var upload = multer({ dest: 'uploads/' });
+
 var app = express();
-var https = require('https');
-var mongo = require('mongodb').MongoClient;
-var url = process.env.MONGOLAB_URL;
+
 
 // set express server
-app.set('json spaces', 2);
 app.use(express.static('public'));
 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/views/index.html');
+});
+
+app.post('/upload/image', upload.single('input'), function(req, res, next) {
+  console.log(req.file);
+  
 });
 
 const listener = app.listen(process.env.PORT, () => {

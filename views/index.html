@@ -20,29 +20,16 @@
   </head>
   <body>
     <h1>
-      Image Search Abstraction Layer
+      File Metadata Microservice
     </h1>
     
     <h5>
-      Pass a search term
+      Upload a file and see the size
     </h5>
     
-    <input id="input" type="text" placeholder="enter link to shorten">
-    
-    <button id="add-button">
-      Add
-    </button>
-    
-    
-    <button id="show-list">
-      Click to Show List of All Searched for Terms
-    </button>
-    
-    <br>
-    
-    <div id="info">
-      
-    </div>
+    <form enctype="multipart/form-data" action="/upload/image" method="post">
+      <input id="image-file" type="file" />
+    </form>
     
     <!-- Your web-app is https, so your scripts need to be too -->
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"
