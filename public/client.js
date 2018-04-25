@@ -2,16 +2,17 @@
 
 $(function() {
   console.log('hello world :o')
+  var input = document.querySelector('input');
   
   $('#image-file').on('change', function() {
-    console.log($('input').files);
+    
+    console.log(input.files);
   });
   
   
  $('#submit-button').on('click', function() {
-   console.log('image file: ' + $('#image-file').files);
    
-   $.post('/upload/image', $('#image-file').files, function(data, status){
+   $.post('/upload/image', input.file, function(data, status){
           
           alert("Data: " + data + "\nStatus: " + status);
       });
