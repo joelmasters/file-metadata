@@ -9,8 +9,8 @@ $(function() {
     console.log(input.files);
   });
   
-  $('form').submit(function() { 
-    $.post('/upload', function(data, status) {
+  $('form').on('submit', function() { 
+    $.get('/upload', function(data, status) {
         alert("Data: " + data + "\nStatus: " + status);
     }); 
   });
