@@ -9,15 +9,20 @@ $(function() {
     console.log(input.files);
   });
   
-  /*$('form').on('submit', function() { 
-    $.get('/upload', function(data, status) {
-        
-    }); 
-  });*/
-  
   $('#submit-button').on('click', function() {
-    $.post('/upload', $('form').serialize(), function(data, status) {
-      alert("Data: " + data + "\nStatus: " + status);
+    var formData = new FormData();
+    formData.append('image', $('#image-file')[0].files[0]);
+
+    $.ajax({
+           url : '/upload',
+           type : 'POST',
+           data : formData,
+           processData: false,  // tell jQuery not to process the data
+           contentType: false,  // tell jQuery not to set contentType
+           success : function(data) {
+               console.log(data);
+               alert('File Size: ' + data + ' bytes');
+           }
     });
   });
   
