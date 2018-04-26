@@ -19,10 +19,9 @@ app.get('/', function(req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-app.post('/upload/image', upload.single('image'), function(req, res, next) {
+app.post('/', upload.single('image'), function(req, res, next) {
   console.log(req.file);
-  res.send("hello");
-  
+  res.sendFile(__dirname + '/views/index.html');
 });
 
 const listener = app.listen(process.env.PORT, () => {

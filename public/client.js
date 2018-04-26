@@ -12,7 +12,7 @@ $(function() {
   
  $('#submit-button').on('click', function() {
    
-   $.post('/upload/image', function(data, status){
+   $.post('/', function(data, status){
           
           alert("Data: " + data + "\nStatus: " + status);
       });
