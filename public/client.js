@@ -9,9 +9,17 @@ $(function() {
     console.log(input.files);
   });
   
-  $('form').on('submit', function() { 
+  /*$('form').on('submit', function() { 
     $.get('/upload', function(data, status) {
-        alert("Data: " + data + "\nStatus: " + status);
+        
     }); 
+  });*/
+  
+  $('#submit-button').on('click', function() {
+    $.post('/upload', $('form').serialize(), function(data, status) {
+      alert("Data: " + data + "\nStatus: " + status);
+    });
   });
+  
+  
 })
