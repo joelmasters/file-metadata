@@ -9,12 +9,9 @@ $(function() {
     console.log(input.files);
   });
   
-  
- $('#submit-button').on('click', function() {
-   
-   $.post('/', function(data, status){
-          
-          alert("Data: " + data + "\nStatus: " + status);
-      });
+  $('form').submit(function() { 
+    $.post('/upload', function(data, status) {
+        alert("Data: " + data + "\nStatus: " + status);
+    }); 
   });
 })
